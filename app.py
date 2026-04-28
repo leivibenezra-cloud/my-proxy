@@ -41,7 +41,15 @@ def proxy():
     if not url: return "Missing URL", 400
 # אם הכתובת לא מתחילה ב-http או https, נוסיף https אוטומטית
     if not url.startswith('http://') and not url.startswith('https://'):
-        url = 'https://' + url 
+        url = 'https://' + url url = request.args.get('url')
+    if not url: return "Missing URL", 400
+
+    # הפקודה הזו מנקה רווחים נסתרים בהתחלה ובסוף
+    url = url.strip()
+
+    # עכשיו כשהטקסט נקי, נבדוק אם צריך להוסיף https
+    if not url.startswith('http://') and not url.startswith('https://'):
+        url = 'https://' + url
     try:
         resp = requests.get(url, stream=True)
         headers = dict(resp.headers)
