@@ -39,6 +39,9 @@ def home():
 def proxy():
     url = request.args.get('url')
     if not url: return "Missing URL", 400
+# אם הכתובת לא מתחילה ב-http או https, נוסיף https אוטומטית
+    if not url.startswith('http://') and not url.startswith('https://'):
+        url = 'https://' + url 
     try:
         resp = requests.get(url, stream=True)
         headers = dict(resp.headers)
